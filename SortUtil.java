@@ -15,9 +15,9 @@ public class SortUtil<T> {
    * @param comp - comparator to use in sorting the items in arr.
    */
   public static <T> void mergesort(ArrayList<T> arr, Comparator<? super T> comp) {
-    ArrayList<T> temp = new ArrayList<T>(arr.size());
-    for (int i = 0; i < temp.size(); i++) {
-      temp.set(i, null);
+    ArrayList<T> temp = new ArrayList<T>();
+    for (int i = 0; i < arr.size(); i++) {
+      temp.add(null);
     }
     mergesortRecursive(arr, temp, comp, 0, arr.size() - 1);
   }
@@ -126,7 +126,7 @@ public class SortUtil<T> {
    */
   public static ArrayList<Integer> generateWorstCase(int size) {
     ArrayList<Integer> worst_arr = new ArrayList<Integer>();
-    for (int i = size; i > 0; i--) {
+    for (int i = size - 1; i >= 0; i--) {
       worst_arr.add(i);
     }
     return worst_arr;  }
@@ -144,7 +144,7 @@ public class SortUtil<T> {
   public static <T> void insertionSort(ArrayList<T> arr, 
       Comparator<? super T> comp, int left, int right) {
     
-    for(int i = left; i < right; i++){ // Sort the list 
+    for(int i = left; i <= right; i++){ // Sort the list 
       T index = arr.get(i); 
       int j = i;
       while(j > left && (comp.compare(arr.get(j-1), index) > 0)){ 
