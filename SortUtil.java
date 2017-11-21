@@ -85,10 +85,8 @@ public class SortUtil<T> {
       }
     }
     
-    for (int i = 0; i < temp.size(); i++) {
-      if(!temp.get(i).equals(null)) {
+    for (int i = left; i <= right; i++) {
         arr.set(i, temp.get(i));
-      }
     }
   }
   
