@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class SortUtil<T> {
   
-  private static int threshold = 10; // When mergesort switches over to insertionsort
+  private static int threshold = 17; // When mergesort switches over to insertionsort
   
   /**
    * Driver for mergesort algorithm. Creates temporary array to aid in sorting.
@@ -127,8 +127,29 @@ public class SortUtil<T> {
     for (int i = size - 1; i >= 0; i--) {
       worst_arr.add(i);
     }
-    return worst_arr;  }
+    return worst_arr; 
+  }
   
+  /**
+   * Creates a reverse-ordered arraylist of size size.
+   * @param size - the size of the list.
+   * @return - a new reverse-ordered list.
+   */
+  public static ArrayList<Integer> generateMergeWorstCase(int size) {
+    ArrayList<Integer> worst_arr = new ArrayList<Integer>(size);
+    for (int i = 0; i < size; i++) {
+      worst_arr.add(1);
+    }
+    int counter = 0;
+    for (int i = 0; i < threshold; i++) {
+      for (int j = 0; j < size / threshold; j++) {
+        worst_arr.set((j * threshold) + i, counter);
+        counter ++;
+      }
+
+    }
+    return worst_arr; 
+  }
   /** 
    * InsertionSort sorts the input array using an insertion 
    * sort algorithm and the input Comparator object. It assumes
@@ -152,9 +173,6 @@ public class SortUtil<T> {
       }
     }
   }
-  /////////////////////////////////////////////////
-  ////////////////////QUICK SORT///////////////////
-  /////////////////////////////////////////////////
   public static <T> void quicksort(ArrayList<T> inputList, Comparator<? super T> c) {
     quickSortRecursive(inputList, 0, inputList.size()-1, c);
   }
@@ -167,28 +185,43 @@ public class SortUtil<T> {
     //int pivot = ((int)(Math.random() * 100))%(inputList.size());//pick a random pivot
     int pivot = (endIndex - startIndex)/2 + startIndex;
     pivot = partition(inputList, startIndex, endIndex, c, pivot);
+    System.out.println("start: " + startIndex);
+    System.out.println("pivot: " + pivot);
+    System.out.println("end: " + endIndex);
     quickSortRecursive(inputList, startIndex, pivot-1, c);
-    quickSortRecursive(inputList, pivot, endIndex, c);
+    quickSortRecursive(inputList, pivot+1, endIndex, c);
   }
   
   private static <T> int partition(ArrayList<T> inputList, int leftPoint, int rightPoint, Comparator<? super T> c, int pivotIndex) {
+   int rightBoundIndex = rightPoint;
+   int leftBoundIndex = leftPoint;
+   T pivotValue = inputList.get(pivotIndex);
    
-    while(leftPoint < rightPoint) {
-      while(c.compare(inputList.get(leftPoint), inputList.get(pivotIndex)) <= 0 && leftPoint < rightPoint) {
+    while(leftPoint <= rightPoint) {
+      if(c.compare(inputList.get(leftPoint), pivotValue) <= 0) {
         leftPoint++;
-        if((leftPoint==rightPoint) && (c.compare(inputList.get(leftPoint), inputList.get(pivotIndex))<=0)){
-          swap(inputList, leftPoint, pivotIndex);
-          return leftPoint;
-        }
+//        if((leftPoint==rightPoint) && (c.compare(inputList.get(leftPoint), inputList.get(pivotIndex))<=0)){
+//          swap(inputList, leftPoint, pivotIndex);
+//          return leftPoint;
+//        }
+        continue;
       }
       
-      while(c.compare(inputList.get(rightPoint), inputList.get(pivotIndex)) >= 0) {
-        if(c.compare(inputList.get(leftPoint), inputList.get(rightPoint)) == 0 && rightPoint==leftPoint || rightPoint==0){
-          break;
-        }
+      if(c.compare(inputList.get(rightPoint), pivotValue) > 0) {
+//        if((c.compare(inputList.get(leftPoint), inputList.get(rightPoint)) >= 0 && rightPoint<=leftPoint) || rightPoint==0){
+//          break;
+//        }
         rightPoint--;
+        continue;
       }
-  
+      
+      if(leftPoint== pivotIndex) {
+        leftPoint++;
+        continue;
+      }else if (rightPoint == pivotIndex) {
+        rightPoint--;
+        continue;
+      }
       if(leftPoint < rightPoint) {
         swap(inputList, leftPoint, rightPoint);
         leftPoint ++;
@@ -196,16 +229,31 @@ public class SortUtil<T> {
       }
       
     }
-    if(pivotIndex > leftPoint) {
-      T temp = inputList.get(pivotIndex);
-      shiftElements(inputList, leftPoint, pivotIndex);
-      inputList.set(leftPoint, temp);
-      return leftPoint;
-    }else {
+    
+    if(leftPoint > rightBoundIndex) {//keeps the leftPointer in bounds
+      leftPoint = rightPoint;
+    }else if (rightPoint < leftBoundIndex) {
+      rightPoint = leftPoint;
+    }
+    if(rightPoint <= leftPoint && rightPoint==pivotIndex) {
+      return rightPoint;
+    }
+    if(rightPoint < leftPoint && leftPoint==pivotIndex) {
       return leftPoint;
     }
+    
+    if(rightPoint < leftPoint && c.compare(inputList.get(rightPoint), pivotValue) <=0 && rightPoint > pivotIndex) {//or if rightPoint Value < leftPoint value
+      swap(inputList, rightPoint, pivotIndex);
+      return rightPoint;
+    }else if(rightPoint < leftPoint && c.compare(inputList.get(leftPoint), pivotValue) >=0){
+      swap(inputList, leftPoint, pivotIndex);
+      return leftPoint;
+    }
+    swap(inputList, leftPoint, pivotIndex);
+    return leftPoint;
 
   }
+ 
   
   /**
    * Switches adjacent values in the inputList.
