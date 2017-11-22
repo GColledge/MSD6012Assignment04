@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class SortUtil<T> {
   
-  private static int threshold = 40; // When mergesort switches over to insertionsort
+  private static int threshold = 10; // When mergesort switches over to insertionsort
   
   /**
    * Driver for mergesort algorithm. Creates temporary array to aid in sorting.
@@ -36,12 +36,12 @@ public class SortUtil<T> {
     
     if ((right - left) > threshold) {
       int center = (left + right) / 2;
-      mergesortRecursive(arr, temp, comp, left, center); // Create sub arrays.
+      mergesortRecursive(arr, temp, comp, left, center);
       mergesortRecursive(arr, temp, comp, center + 1, right);
-      merge(arr, temp, comp, left, center + 1, right); // Combing sorted sub arrays.
+      merge(arr, temp, comp, left, center + 1, right);
     }
     else {
-      insertionSort(arr, comp, left, right); // Sort sub arrays.
+      insertionSort(arr, comp, left, right);
     }
   }
   
@@ -63,16 +63,16 @@ public class SortUtil<T> {
     int lhc = left; // left-hand counter
     int rhc = center_plus_one; // right-hand counter
     while (temp_counter <= right) {
-      if (rhc > right) { // If right half is finished fill in with the rest of left
+      if (rhc > right) {
         temp.set(temp_counter, arr.get(lhc));
         temp_counter++; lhc++;
         continue;
-      } // If left half is finished fill in with right
-      else if (lhc == center_plus_one) { 
+      }
+      else if (lhc == center_plus_one) {
         temp.set(temp_counter, arr.get(rhc));
         temp_counter++; rhc++;
         continue;
-      } // Fill in with smallest value
+      }
       else if (comp.compare(arr.get(lhc), arr.get(rhc)) > 0) {
         temp.set(temp_counter, arr.get(rhc));
         temp_counter++; rhc++;
@@ -85,7 +85,6 @@ public class SortUtil<T> {
       }
     }
     
-    // Add sorted portion back into original array.
     for (int i = left; i <= right; i++) {
         arr.set(i, temp.get(i));
     }
@@ -128,30 +127,8 @@ public class SortUtil<T> {
     for (int i = size - 1; i >= 0; i--) {
       worst_arr.add(i);
     }
-    return worst_arr; 
-  }
+    return worst_arr;  }
   
-  /**
-   * Creates a reverse-ordered arraylist of size size.
-   * @param size - the size of the list.
-   * @return - a new reverse-ordered list.
-   */
-  /*
-  public static ArrayList<Integer> generateMergeWorstCase(int size) {
-    ArrayList<Integer> worst_arr = new ArrayList<Integer>(size);
-    for (int i = 0; i < size; i++) {
-      worst_arr.add(1);
-    }
-    int counter = 0;
-    for (int i = threshold - 1; i >= 0; i--) {
-      for (int j = size / threshold - 1; j >= 0; j--) {
-        worst_arr.set((j * threshold) + i, counter);
-        counter ++;
-      }
-
-    }
-    return worst_arr; 
-  }*/
   /** 
    * InsertionSort sorts the input array using an insertion 
    * sort algorithm and the input Comparator object. It assumes
@@ -175,15 +152,18 @@ public class SortUtil<T> {
       }
     }
   }
+  /////////////////////////////////////////////////
+  ////////////////////QUICK SORT///////////////////
+  /////////////////////////////////////////////////
   public static <T> void quicksort(ArrayList<T> inputList, Comparator<? super T> c) {
     quickSortRecursive(inputList, 0, inputList.size()-1, c);
   }
   
   private static <T> void quickSortRecursive(ArrayList<T> inputList, int startIndex, int endIndex, Comparator<? super T> c) {
     if(startIndex >= endIndex) {
+      //return when there are one or fewer elements to sort
       return;
     }
-
     //P I C K   A    P I V O T
     //random pivot
 //    int pivot = ((int)((Math.random() * 100))%(endIndex-startIndex)+startIndex);
@@ -200,33 +180,43 @@ public class SortUtil<T> {
   }
 
   /**
-   * @param inputList
-   * @param startIndex
-   * @param endIndex
-   * @param c
-   * @param pivot
-   * @return
+   * @param inputList - the list that is being sorted
+   * @param startIndex - the first element in the section to be partitioned.
+   * @param endIndex - last element in the section to be partitioned.
+   * @param c - the comparator that determines what "greater than" or 
+   *  "less than" means.
+   * @return - returns the pivot to be used in the partition. The pivot is 
+   *  the first, last or middle index depending on which value is in between
+   *  the other two.
    */
-  private static <T> int medianPivotPicker(ArrayList<T> inputList, int startIndex, int endIndex,
-      Comparator<? super T> c) {
+  private static <T> int medianPivotPicker(ArrayList<T> inputList, 
+      int startIndex, int endIndex, Comparator<? super T> c) {
     int midPoint = (endIndex - startIndex)/2 + startIndex;
     T midValue = inputList.get(midPoint);
     T firstValue = inputList.get(startIndex);
     T lastValue = inputList.get(endIndex);
     int pivot = midPoint;
-    if(c.compare(firstValue, midValue) > 0 && c.compare(firstValue, lastValue) > 0 ){
+    if(c.compare(firstValue, midValue) > 0 
+        && c.compare(firstValue, lastValue) > 0 ){
+      
       if(c.compare(lastValue, midValue) > 0) {
         pivot = endIndex;
       }else {
         pivot = midPoint;
       }
-    }else if(c.compare(lastValue, midValue) > 0 && c.compare(lastValue, firstValue) > 0 ){
+      
+    }else if(c.compare(lastValue, midValue) > 0 
+        && c.compare(lastValue, firstValue) > 0 ){
+      
       if(c.compare(firstValue, midValue) > 0) {
         pivot = startIndex;
       }else {
         pivot = midPoint;
       }
-    }else if(c.compare(midValue, lastValue) > 0 && c.compare(midValue, firstValue) > 0 ){
+      
+    }else if(c.compare(midValue, lastValue) > 0 
+        && c.compare(midValue, firstValue) > 0 ){
+      
       if(c.compare(firstValue, lastValue) > 0) {
         pivot = startIndex;
       }else {
@@ -236,68 +226,68 @@ public class SortUtil<T> {
     return pivot;
   }
   
-  private static <T> int partition(ArrayList<T> inputList, int leftPoint, int rightPoint, Comparator<? super T> c, int pivotIndex) {
+  private static <T> int partition(ArrayList<T> inputList, int leftPoint,
+      int rightPoint, Comparator<? super T> c, int pivotIndex) {
    int rightBoundIndex = rightPoint;
    int leftBoundIndex = leftPoint;
    T pivotValue = inputList.get(pivotIndex);
    
-    while(leftPoint <= rightPoint) {
+    while(leftPoint <= rightPoint) {//continues until the pointers have met.
       if(c.compare(inputList.get(leftPoint), pivotValue) <= 0) {
         leftPoint++;
-//        if((leftPoint==rightPoint) && (c.compare(inputList.get(leftPoint), inputList.get(pivotIndex))<=0)){
-//          swap(inputList, leftPoint, pivotIndex);
-//          return leftPoint;
-//        }
         continue;
       }
       
       if(c.compare(inputList.get(rightPoint), pivotValue) > 0) {
-//        if((c.compare(inputList.get(leftPoint), inputList.get(rightPoint)) >= 0 && rightPoint<=leftPoint) || rightPoint==0){
-//          break;
-//        }
         rightPoint--;
         continue;
       }
       
-      if(leftPoint== pivotIndex) {
+      if(leftPoint== pivotIndex) {//skip the pivot
         leftPoint++;
         continue;
       }else if (rightPoint == pivotIndex) {
         rightPoint--;
         continue;
       }
+      
       if(leftPoint < rightPoint) {
+        //put larger values on the right and smaller values on the left.
         swap(inputList, leftPoint, rightPoint);
         leftPoint ++;
         rightPoint--;
       }
       
     }
-
+    //the position for the pivot value should be reached.
     if(leftPoint > rightBoundIndex) {//keeps the leftPointer in bounds
       leftPoint = rightPoint;
     }else if (rightPoint < leftBoundIndex) {
       rightPoint = leftPoint;
     }
+    
+    //deal with some wierd endpoint behavior
     if(rightPoint <= leftPoint && rightPoint==pivotIndex) {
       return rightPoint;
     }
     if(rightPoint < leftPoint && leftPoint==pivotIndex) {
       return leftPoint;
     }
-    
-    if(rightPoint < leftPoint && c.compare(inputList.get(rightPoint), pivotValue) <=0 && rightPoint > pivotIndex) {//or if rightPoint Value < leftPoint value
+    if(rightPoint < leftPoint 
+        && c.compare(inputList.get(rightPoint), pivotValue) <=0 
+        && rightPoint > pivotIndex) {
       swap(inputList, rightPoint, pivotIndex);
       return rightPoint;
-    }else if(rightPoint < leftPoint && c.compare(inputList.get(leftPoint), pivotValue) >=0){
+    }else if(rightPoint < leftPoint 
+        && c.compare(inputList.get(leftPoint), pivotValue) >=0){
       swap(inputList, leftPoint, pivotIndex);
       return leftPoint;
     }
+    //typical situation
     swap(inputList, leftPoint, pivotIndex);
     return leftPoint;
 
   }
-
   
   /**
    * Switches adjacent values in the inputList.

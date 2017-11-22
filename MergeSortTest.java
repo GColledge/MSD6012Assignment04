@@ -34,7 +34,6 @@ public class MergeSortTest {
     testList.add(3);
     testList.add(5);
 //    testList.add(1);
-
   }
 
   @After
@@ -177,6 +176,8 @@ public class MergeSortTest {
       assert(aveCase.get(i+1) - aveCase.get(i) >= 0);
     }
   }
+  
+  
 
   protected static class OrderNumerically implements Comparator<Integer> {
 

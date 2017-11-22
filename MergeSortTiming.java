@@ -25,7 +25,7 @@ public class MergeSortTiming {
 
         for (int iter = 0; iter < ITER_COUNT; iter++) {
           // SET UP!
-          ArrayList<Integer> avg_arr = SortUtil.generateMergeWorstCase(size);
+          ArrayList<Integer> avg_arr = SortUtil.generateWorstCase(size);
           // TIME IT!
           long start = System.nanoTime();
           SortUtil.mergesort(avg_arr, comp);
