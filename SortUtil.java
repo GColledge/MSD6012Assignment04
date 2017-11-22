@@ -6,8 +6,9 @@ import java.util.Random;
 
 public class SortUtil<T> {
   
-  private static int threshold = 10; // When mergesort switches over to insertionsort
-  
+
+  private static int threshold = 17; // When mergesort switches over to insertionsort
+ 
   /**
    * Driver for mergesort algorithm. Creates temporary array to aid in sorting.
    * @param arr - arraylist, of any type, that needs to 
@@ -127,8 +128,30 @@ public class SortUtil<T> {
     for (int i = size - 1; i >= 0; i--) {
       worst_arr.add(i);
     }
-    return worst_arr;  }
+    return worst_arr; 
+  }
   
+  /**
+   * Creates a reverse-ordered arraylist of size size.
+   * @param size - the size of the list.
+   * @return - a new reverse-ordered list.
+   */
+  public static ArrayList<Integer> generateMergeWorstCase(int size) {
+    ArrayList<Integer> worst_arr = new ArrayList<Integer>(size);
+    for (int i = 0; i < size; i++) {
+      worst_arr.add(1);
+    }
+    int counter = 0;
+    for (int i = 0; i < threshold; i++) {
+      for (int j = 0; j < size / threshold; j++) {
+        worst_arr.set((j * threshold) + i, counter);
+        counter ++;
+      }
+
+    }
+    return worst_arr; 
+  }
+
   /** 
    * InsertionSort sorts the input array using an insertion 
    * sort algorithm and the input Comparator object. It assumes
@@ -152,9 +175,6 @@ public class SortUtil<T> {
       }
     }
   }
-  /////////////////////////////////////////////////
-  ////////////////////QUICK SORT///////////////////
-  /////////////////////////////////////////////////
   public static <T> void quicksort(ArrayList<T> inputList, Comparator<? super T> c) {
     quickSortRecursive(inputList, 0, inputList.size()-1, c);
   }
@@ -163,6 +183,7 @@ public class SortUtil<T> {
     if(startIndex >= endIndex) {
       return;
     }
+
     //P I C K   A    P I V O T
     //random pivot
 //    int pivot = ((int)((Math.random() * 100))%(endIndex-startIndex)+startIndex);
@@ -252,7 +273,7 @@ public class SortUtil<T> {
       }
       
     }
-    
+
     if(leftPoint > rightBoundIndex) {//keeps the leftPointer in bounds
       leftPoint = rightPoint;
     }else if (rightPoint < leftBoundIndex) {
@@ -276,6 +297,7 @@ public class SortUtil<T> {
     return leftPoint;
 
   }
+
   
   /**
    * Switches adjacent values in the inputList.
