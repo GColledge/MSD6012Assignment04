@@ -16,24 +16,23 @@ public class smallTest {
     ArrayList<Integer> testList = new ArrayList<Integer>();
     testList.add(9);
     testList.add(2);
-    testList.add(6);
+    testList.add(3);
     testList.add(4);
     testList.add(3);
     testList.add(5);
     testList.add(9);
-    testList.add(9);
+    testList.add(3);
     testList.add(2);
     testList.add(6);
-    testList.add(4);
     testList.add(3);
-    testList.add(5);
+    testList.add(3);
+    testList.add(3);
     testList.add(1);
-//    for (int i = 0; i < 1; i++) {
+    testList.add(3);
+//    for (int i = 0; i < 25; i++) {
 //      testList.add((int)(Math.random() *100)%10);
 //    }
     
-
-
     OrderNumerically c = new OrderNumerically();
     SortUtil.quicksort(testList, c);
     

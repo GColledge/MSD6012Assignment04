@@ -163,15 +163,56 @@ public class SortUtil<T> {
     if(startIndex >= endIndex) {
       return;
     }
-    //pick pivot
-    //int pivot = ((int)(Math.random() * 100))%(inputList.size());//pick a random pivot
-    int pivot = (endIndex - startIndex)/2 + startIndex;
+    //P I C K   A    P I V O T
+    //random pivot
+//    int pivot = ((int)((Math.random() * 100))%(endIndex-startIndex)+startIndex);
+    //midpoint pivot
+//    int pivot = (endIndex - startIndex)/2 + startIndex;
+    
+    //median pivot
+    int pivot = medianPivotPicker(inputList, startIndex, endIndex, c);
+    
+    //MAIN RECURSIVE BODY
     pivot = partition(inputList, startIndex, endIndex, c, pivot);
-    System.out.println("start: " + startIndex);
-    System.out.println("pivot: " + pivot);
-    System.out.println("end: " + endIndex);
     quickSortRecursive(inputList, startIndex, pivot-1, c);
     quickSortRecursive(inputList, pivot+1, endIndex, c);
+  }
+
+  /**
+   * @param inputList
+   * @param startIndex
+   * @param endIndex
+   * @param c
+   * @param pivot
+   * @return
+   */
+  private static <T> int medianPivotPicker(ArrayList<T> inputList, int startIndex, int endIndex,
+      Comparator<? super T> c) {
+    int midPoint = (endIndex - startIndex)/2 + startIndex;
+    T midValue = inputList.get(midPoint);
+    T firstValue = inputList.get(startIndex);
+    T lastValue = inputList.get(endIndex);
+    int pivot = midPoint;
+    if(c.compare(firstValue, midValue) > 0 && c.compare(firstValue, lastValue) > 0 ){
+      if(c.compare(lastValue, midValue) > 0) {
+        pivot = endIndex;
+      }else {
+        pivot = midPoint;
+      }
+    }else if(c.compare(lastValue, midValue) > 0 && c.compare(lastValue, firstValue) > 0 ){
+      if(c.compare(firstValue, midValue) > 0) {
+        pivot = startIndex;
+      }else {
+        pivot = midPoint;
+      }
+    }else if(c.compare(midValue, lastValue) > 0 && c.compare(midValue, firstValue) > 0 ){
+      if(c.compare(firstValue, lastValue) > 0) {
+        pivot = startIndex;
+      }else {
+        pivot = endIndex;
+      }
+    }
+    return pivot;
   }
   
   private static <T> int partition(ArrayList<T> inputList, int leftPoint, int rightPoint, Comparator<? super T> c, int pivotIndex) {
