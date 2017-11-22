@@ -6,9 +6,8 @@ import java.util.Random;
 
 public class SortUtil<T> {
   
-
-  private static int threshold = 17; // When mergesort switches over to insertionsort
- 
+  private static int threshold = 40; // When mergesort switches over to insertionsort
+  
   /**
    * Driver for mergesort algorithm. Creates temporary array to aid in sorting.
    * @param arr - arraylist, of any type, that needs to 
@@ -37,12 +36,12 @@ public class SortUtil<T> {
     
     if ((right - left) > threshold) {
       int center = (left + right) / 2;
-      mergesortRecursive(arr, temp, comp, left, center);
+      mergesortRecursive(arr, temp, comp, left, center); // Create sub arrays.
       mergesortRecursive(arr, temp, comp, center + 1, right);
-      merge(arr, temp, comp, left, center + 1, right);
+      merge(arr, temp, comp, left, center + 1, right); // Combing sorted sub arrays.
     }
     else {
-      insertionSort(arr, comp, left, right);
+      insertionSort(arr, comp, left, right); // Sort sub arrays.
     }
   }
   
@@ -64,16 +63,16 @@ public class SortUtil<T> {
     int lhc = left; // left-hand counter
     int rhc = center_plus_one; // right-hand counter
     while (temp_counter <= right) {
-      if (rhc > right) {
+      if (rhc > right) { // If right half is finished fill in with the rest of left
         temp.set(temp_counter, arr.get(lhc));
         temp_counter++; lhc++;
         continue;
-      }
-      else if (lhc == center_plus_one) {
+      } // If left half is finished fill in with right
+      else if (lhc == center_plus_one) { 
         temp.set(temp_counter, arr.get(rhc));
         temp_counter++; rhc++;
         continue;
-      }
+      } // Fill in with smallest value
       else if (comp.compare(arr.get(lhc), arr.get(rhc)) > 0) {
         temp.set(temp_counter, arr.get(rhc));
         temp_counter++; rhc++;
@@ -86,6 +85,7 @@ public class SortUtil<T> {
       }
     }
     
+    // Add sorted portion back into original array.
     for (int i = left; i <= right; i++) {
         arr.set(i, temp.get(i));
     }
@@ -136,22 +136,22 @@ public class SortUtil<T> {
    * @param size - the size of the list.
    * @return - a new reverse-ordered list.
    */
+  /*
   public static ArrayList<Integer> generateMergeWorstCase(int size) {
     ArrayList<Integer> worst_arr = new ArrayList<Integer>(size);
     for (int i = 0; i < size; i++) {
       worst_arr.add(1);
     }
     int counter = 0;
-    for (int i = 0; i < threshold; i++) {
-      for (int j = 0; j < size / threshold; j++) {
+    for (int i = threshold - 1; i >= 0; i--) {
+      for (int j = size / threshold - 1; j >= 0; j--) {
         worst_arr.set((j * threshold) + i, counter);
         counter ++;
       }
 
     }
     return worst_arr; 
-  }
-
+  }*/
   /** 
    * InsertionSort sorts the input array using an insertion 
    * sort algorithm and the input Comparator object. It assumes
